@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, ReactNode, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import Submit from "@/components/Submit";
 import { useFormStore } from "@/store/formStore";
@@ -9,8 +9,24 @@ interface FormError {
   [key: string]: string;
 }
 
+interface LocationFormData {
+  addressLine1: string;
+  addressLine2: string;
+  zipCode: string;
+  city: string;
+  state: string;
+  phoneNumber: string;
+  contactName: string;
+}
+
 // Form Components
-export function FormSection({ title, description, children }) {
+interface FormSectionProps {
+  title: string;
+  description: string;
+  children: ReactNode;
+}
+
+export function FormSection({ title, description, children }: FormSectionProps) {
   return (
     <section className="p-0">
       <header>
@@ -144,7 +160,15 @@ export function FormSelect({
   );
 }
 
-export function PhoneInput({ label, value, onChange, required = false, error }) {
+interface PhoneInputProps {
+  label?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  error?: string;
+}
+
+export function PhoneInput({ label, value, onChange, required = false, error }: PhoneInputProps) {
   return (
     <div className="mb-4 flex-1">
       {label && (
@@ -176,7 +200,13 @@ export function FormDivider() {
   return <hr className="my-6 border-t border-neutral-200" />;
 }
 
-export function ActionButtons({ onPrevious, onSubmit, isSubmitting }) {
+interface ActionButtonsProps {
+  onPrevious: () => void;
+  onSubmit: (e: React.FormEvent) => void;
+  isSubmitting: boolean;
+}
+
+export function ActionButtons({ onPrevious, onSubmit, isSubmitting }: ActionButtonsProps) {
   return (
     <div className="flex gap-2.5 mt-6">
       <button
@@ -203,7 +233,7 @@ const LocationDetailsForm = () => {
   const { activityData, setLocationData, resetForm } = useFormStore();
   
   // State for form data
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LocationFormData>({
     addressLine1: "",
     addressLine2: "",
     zipCode: "",
@@ -219,7 +249,7 @@ const LocationDetailsForm = () => {
   const [errors, setErrors] = useState<FormError>({});
 
   // Handle input changes
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -273,7 +303,7 @@ const LocationDetailsForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {

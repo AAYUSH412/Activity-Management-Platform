@@ -2,10 +2,15 @@
 import React, { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormStore } from "@/store/formStore";
+import type { ActivityFormData } from "@/types";
 
+// Define interface for form errors
+interface FormErrors {
+  [key: string]: string;
+}
 
 // Define initial form state
-const initialFormState = {
+const initialFormState: ActivityFormData = {
   activityName: "",
   category: "",
   otherCategory: "",
@@ -21,7 +26,7 @@ const ActivityDetailsForm = () => {
   const { setActivityData, activityData } = useFormStore();
   
   // Load form data from store or localStorage
-  const [formData, setFormData] = useState(() => {
+  const [formData, setFormData] = useState<ActivityFormData>(() => {
     if (activityData) return activityData;
     
     if (typeof window !== "undefined") {
@@ -31,7 +36,7 @@ const ActivityDetailsForm = () => {
     return initialFormState;
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const {
     activityName,
@@ -48,8 +53,8 @@ const ActivityDetailsForm = () => {
     localStorage.setItem("activityFormData", JSON.stringify(formData));
   }, [formData]);
 
-  // Update form data
-  const updateFormData = (field, value) => {
+  // Update form data with proper typing
+  const updateFormData = (field: keyof ActivityFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -62,7 +67,7 @@ const ActivityDetailsForm = () => {
 
   // Validate form before submission
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: FormErrors = {};
     
     if (!formData.activityName.trim()) {
       newErrors.activityName = "Activity name is required";
