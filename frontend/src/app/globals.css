@@ -1,0 +1,32 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-inter);
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background: white;
+}
+
+.font-inter {
+  font-family: var(--font-inter);
+}
+
+/* Add custom styles for form validation */
+input:invalid,
+select:invalid,
+textarea:invalid {
+  border-color: #ef4444;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
